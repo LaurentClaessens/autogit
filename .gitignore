@@ -1,0 +1,6 @@
+.directory
+*.swp
+.kk.log
+.viminfo
+*~
+*.class
