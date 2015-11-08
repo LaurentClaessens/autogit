@@ -1,15 +1,16 @@
+// The class 'mainloop' implements a (recursive) loop over all the repertories included in 'starting_path'.
+
 import java.io.*;
 
 public class mainloop
 {
     private File starting_path;
-    public void DealWithFile(File pathname)
+
+    public mainloop (File starting_path) { this.starting_path=starting_path; }
+    public void DealWithDirectory(File filename) throws IOException
     {
-        System.out.println("File : "+pathname);
-    }
-    public void DealWithDirectory(File pathname)
-    {
-        System.out.println("Entering directory "+pathname);
+        File pathname = filename.getCanonicalFile(); 
+        //System.out.println("Entering directory "+pathname);
         if (!pathname.exists())
         {
             System.out.println("The path "+pathname+" does not exist");
@@ -19,12 +20,14 @@ public class mainloop
         for (int i=0;i<content.length;i++)
         {
             File newpath=content[i];
-            if (newpath.isDirectory()) { DealWithDirectory(newpath) ;  }
-            else if (newpath.isFile()) { DealWithFile(newpath); }
-            else 
-            {
-                System.out.println("What the hell is "+newpath+" ? ");
-                System.exit(1);
+            if (newpath.isDirectory()) 
+            { 
+                if (newpath.getAbsolutePath().endsWith(".git"))
+                {
+                    DealWithGit git_task= new DealWithGit(pathname);
+                    git_task.start();
+                }
+                DealWithDirectory(newpath) ;  
             }
         }
     }
