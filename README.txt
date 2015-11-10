@@ -4,7 +4,7 @@ If you are able to install/use Jgit under Ubuntu, explain me and I would be glad
 
 Next improvements :
 
-* graphical interface
+* graphical interface (one window by directory needing a commit or something)
 * help to update .gitignore
 * help making 'git add *'
 * propose a 'git diff'

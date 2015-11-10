@@ -28,5 +28,6 @@ class DealWithGit extends Thread{
         {
             System.out.println("Git commit needed for "+git.repo_path);
         }
+        else {System.out.println("Git NON NEEDED for"+git.repo_path);}
     }
 };
