@@ -39,20 +39,15 @@ public class Git
     // return 'true' if a commit is needed.
     {
         String line;
+        String searched="nothing to commit, working directory clean";
         CommandLine command=new CommandLine("git status");
         command.working_directory=repo_path;
         command.envp.add("LC_ALL=C");
+
         BufferedReader input=command.get_buffered_reader_output();
-        System.out.println("On part pour"+repo_path);
-        String searched="nothing to commit, working directory clean";
         while (  (line=input.readLine())!=null  )
         {
-            System.out.println(searched.getClass().getName());
-            System.out.println(line.getClass().getName());
-            System.out.println("+"+searched+"+");
-            System.out.println("+"+line+"+");
-            if (line==searched) {
-                System.out.println("ON Y EST !!");
+            if (line.endsWith(searched)) {              // its strange that this works and startsWith works while '==' does not works.
                 return false;}
         }
         return true;
