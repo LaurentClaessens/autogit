@@ -22,10 +22,22 @@ import java.io.*;
 import java.io.File;
 
 
-public class Git
+public class GitRepository
 {
-    public File repo_path;
-    public Git(File pathname) throws IOException
+    private BufferedReader status_buffered_message() throws IOException
+    {
+        String line;
+        CommandLine command=new CommandLine("git status");
+        command.working_directory=repo_path;
+        command.envp.add("LC_ALL=C");
+
+        BufferedReader input=command.get_buffered_reader_output();
+        return input;
+    }
+
+    private File repo_path;
+    public String getPathName() { return repo_path.getName(); }
+    public GitRepository(File pathname) throws IOException
     {
 
         if (!pathname.exists())
@@ -35,17 +47,26 @@ public class Git
         }
         repo_path=pathname.getCanonicalFile();
     }
+    public String status_message() throws IOException
+    {
+        String output="";
+        String line;
+
+        BufferedReader buffered_message = status_buffered_message();
+        while (  (line=buffered_message.readLine())!=null  )
+        {
+            output=output+line+"\n";
+        }
+        buffered_message.close();
+        return output;
+    }
     public boolean need_commit() throws IOException
     // return 'true' if a commit is needed.
     {
         String line;
         String searched="nothing to commit, working directory clean";
-        CommandLine command=new CommandLine("git status");
-        command.working_directory=repo_path;
-        command.envp.add("LC_ALL=C");
-
-        BufferedReader input=command.get_buffered_reader_output();
-        while (  (line=input.readLine())!=null  )
+        BufferedReader buffered_message = status_buffered_message();
+        while (  (line=buffered_message.readLine())!=null  )
         {
             if (line.endsWith(searched)) {              // its strange that this works and startsWith works while '==' does not works.
                 return false;}

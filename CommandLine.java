@@ -50,6 +50,7 @@ class CommandLine
         {
             output=output+line+"\n";
         }
+        input.close();
         return output;
     }
 }

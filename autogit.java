@@ -17,7 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //*/
 
 import java.io.*;
-//import mainloop.*;
 
 class autogit {
     public static void main(String[] args) {

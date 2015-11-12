@@ -23,11 +23,14 @@ class DealWithGit extends Thread{
     DealWithGit(File dp) throws IOException
     {
         directory_path=dp;
-        Git git=new Git(directory_path);
-        if (git.need_commit() )
+        GitRepository repo=new GitRepository(directory_path);
+        if (repo.need_commit() )
         {
-            System.out.println("Git commit needed for "+git.repo_path);
+            System.out.println("Git commit needed for "+repo.getPathName());
+            Runnable gw_runnable = new GitWindowsLauncher(repo);
+            Thread gw = new Thread(gw_runnable);
+            gw.start();
         }
-        else {System.out.println("Git NON NEEDED for"+git.repo_path);}
+        else {System.out.println("Git NON NEEDED for"+repo.getPathName());}
     }
 };
