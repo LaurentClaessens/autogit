@@ -22,14 +22,13 @@ import java.awt.*;
 import java.io.*;
 
 public class GitWindows extends JFrame {
-    private static final int DEFAULT_WIDTH = 300;
-    private static final int DEFAULT_HEIGHT = 200;
 
     private JTextArea git_status_area;
     private GitRepository repo;
 
     private void addGitCommitToPane( final Container pane )
     {
+        //JPanel area = new JPanel( new BorderLayout() );
         JPanel area = new JPanel();
         String message;
         try
@@ -37,7 +36,12 @@ public class GitWindows extends JFrame {
             message=repo.status_message();
         }
         catch (IOException e) { message="status failed"; }
-        git_status_area= new JTextArea(message) ;
+        git_status_area= new JTextArea(message);
+        git_status_area.setEditable(false);
+
+        System.out.println("git preferred : "+git_status_area.getPreferredSize()) ;
+        git_status_area.setSize(git_status_area.getPreferredSize());
+
         area.add(git_status_area);
         pane.add(area);
     }
@@ -47,8 +51,8 @@ public class GitWindows extends JFrame {
         super("bla");
         repo=gitRepo;
 
-        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         addGitCommitToPane(getContentPane());
+        setSize(getContentPane().getPreferredSize());
     }
 };
 

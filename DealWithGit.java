@@ -31,6 +31,5 @@ class DealWithGit extends Thread{
             Thread gw = new Thread(gw_runnable);
             gw.start();
         }
-        else {System.out.println("Git NON NEEDED for"+repo.getPathName());}
     }
 };

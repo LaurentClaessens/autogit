@@ -17,9 +17,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //*/
 
 import java.io.*;
+import java.util.logging.Logger;
 
 class autogit {
     public static void main(String[] args) {
+
+
         File starting_path=new File(args[0]);
         mainloop loop=new mainloop(starting_path);
         try{

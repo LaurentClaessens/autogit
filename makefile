@@ -13,4 +13,4 @@ GitWindows.class:GitWindows.java
 clean:
 	rm *.class
 run:autogit
-	java autogit
+	java autogit ..

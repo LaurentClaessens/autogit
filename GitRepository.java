@@ -20,10 +20,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import java.io.*;
 import java.io.File;
+import java.util.logging.Logger;
+import java.util.logging.FileHandler;
 
 
 public class GitRepository
 {
+
+    private Logger logger = Logger.getGlobal();
+
     private BufferedReader status_buffered_message() throws IOException
     {
         String line;
@@ -36,7 +41,17 @@ public class GitRepository
     }
 
     private File repo_path;
-    public String getPathName() { return repo_path.getName(); }
+    public String getPathName() { 
+        String can_path;
+        try{ 
+            can_path=repo_path.getCanonicalPath();
+        } 
+        catch (IOException e){ 
+            can_path="Canonical path failed";
+            logger.info("Canonical path failed for "+repo_path);
+        }
+        return can_path;
+    }
     public GitRepository(File pathname) throws IOException
     {
 
@@ -46,6 +61,10 @@ public class GitRepository
             System.exit(1);
         }
         repo_path=pathname.getCanonicalFile();
+
+        logger.setUseParentHandlers(false);
+        FileHandler fh= new FileHandler(".GitRepository.log");
+        logger.addHandler(fh);
     }
     public String status_message() throws IOException
     {
