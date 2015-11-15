@@ -18,8 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import javax.swing.*;
 import java.awt.*;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
+
+
 
 public class GitWindows extends JFrame {
 
@@ -28,26 +31,43 @@ public class GitWindows extends JFrame {
     private void addGitCommitToPane( final Container pane )
     {
         JPanel area = new JPanel();
-        JTextArea git_status_area;
         String message;
         try
         {
             message=repo.status_message();
         }
         catch (IOException e) { message="status failed"; }
-        git_status_area= new JTextArea(message);
+        JEditorPane git_status_pane = new JEditorPane();
 
-        git_status_area.setEditable(false);
-        git_status_area.setSize(git_status_area.getPreferredSize());
+        git_status_pane.setContentType("text/html");
+        git_status_pane.setText("<html><b>"+repo.getPathName()+"</b><br><br><pre>"+message+"</pre></html>");
+        git_status_pane.setEditable(false);
 
-        area.add(git_status_area);
+        git_status_pane.setEditable(false);
+        git_status_pane.setSize(git_status_pane.getPreferredSize());
+
+        area.add(git_status_pane);
         pane.add(area);
     }
 
     private void addButtonsToPanel( final Container pane )
     {
         JPanel button_panel = new JPanel();
-        JButton gitignore_button = new JButton("add to .gitignore");
+        JButton gitignore_button = new JButton("Edit .gitignore");
+
+
+            // This ActionListener is embedded because I do not know how to pass a parameter (repo).
+            class gitignoreActionListener implements ActionListener
+            {
+                public void actionPerformed(ActionEvent e){ 
+                    Runnable edit_gitignore_runnable = new edit_gitignore_launcher(repo);
+                    Thread edit_gitignore = new Thread(edit_gitignore_runnable);
+                    edit_gitignore.start();
+                }
+}
+
+        gitignore_button.addActionListener( new gitignoreActionListener() );
+
         button_panel.add(gitignore_button);
         pane.add( button_panel,BorderLayout.SOUTH );
     }

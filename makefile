@@ -8,8 +8,10 @@ GitRepository.class:GitRepository.java CommandLine.class
 	javac GitRepository.java
 CommandLine.class:CommandLine.java
 	javac CommandLine.java
-GitWindows.class:GitWindows.java
+GitWindows.class:GitWindows.java open_gitignore.class
 	javac GitWindows.java
+open_gitignore.class:open_gitignore.java
+	javac open_gitignore.java
 clean:
 	rm *.class
 run:autogit
