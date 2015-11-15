@@ -23,13 +23,12 @@ import java.io.*;
 
 public class GitWindows extends JFrame {
 
-    private JTextArea git_status_area;
     private GitRepository repo;
 
     private void addGitCommitToPane( final Container pane )
     {
-        //JPanel area = new JPanel( new BorderLayout() );
         JPanel area = new JPanel();
+        JTextArea git_status_area;
         String message;
         try
         {
@@ -37,13 +36,33 @@ public class GitWindows extends JFrame {
         }
         catch (IOException e) { message="status failed"; }
         git_status_area= new JTextArea(message);
-        git_status_area.setEditable(false);
 
-        System.out.println("git preferred : "+git_status_area.getPreferredSize()) ;
+        git_status_area.setEditable(false);
         git_status_area.setSize(git_status_area.getPreferredSize());
 
         area.add(git_status_area);
         pane.add(area);
+    }
+
+    private void addButtonsToPanel( final Container pane )
+    {
+        JPanel button_panel = new JPanel();
+        JButton gitignore_button = new JButton("add to .gitignore");
+        button_panel.add(gitignore_button);
+        pane.add( button_panel,BorderLayout.SOUTH );
+    }
+
+    private void addTitleToPanel( final Container pane )
+    {
+        JPanel title_panel = new JPanel();
+
+        JEditorPane editor = new JEditorPane();
+        editor.setContentType("text/html");
+        editor.setText("<html><b>"+repo.getPathName()+"</b></html>");
+        editor.setEditable(false);
+
+        title_panel.add(editor);
+        pane.add( title_panel,BorderLayout.NORTH);
     }
 
     public GitWindows(GitRepository gitRepo)
@@ -52,6 +71,8 @@ public class GitWindows extends JFrame {
         repo=gitRepo;
 
         addGitCommitToPane(getContentPane());
+        addButtonsToPanel(getContentPane());
+        addTitleToPanel(getContentPane());
         setSize(getContentPane().getPreferredSize());
     }
 };
