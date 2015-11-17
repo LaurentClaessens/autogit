@@ -21,7 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import java.io.*;
 import java.io.File;
 
-
 public class GitRepository
 {
 
@@ -44,7 +43,7 @@ public class GitRepository
         } 
         catch (IOException e){ 
             can_path="Canonical path failed";
-            LogMaker.logger.info("Canonical path failed for "+repo_path);
+            LogMaker.get_logger().logger.info("Canonical path failed for "+repo_path);
         }
         return can_path;
     }

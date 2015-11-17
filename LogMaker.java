@@ -16,13 +16,30 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //*/
 
+import java.io.*;
 import java.util.logging.Logger;
 import java.util.logging.FileHandler;
 
 class LogMaker
 {
     private static Logger logger = Logger.getGlobal();
-    logger.setUseParentHandlers(false);
-    FileHandler fh= new FileHandler(".autogit.log");
-    logger.addHandler(fh);
+
+    public Logger get_logger()
+    {
+        return logger;
+    }
+
+    public void main()
+    {
+        try{
+            FileHandler fh= new FileHandler(".autogit.log");
+            logger.addHandler(fh);
+            logger.setUseParentHandlers(false);
+        }
+        catch (IOException e)
+        { 
+            System.out.println("I cannot create the log file");
+            System.exit(1); 
+        }
+    }
 };
