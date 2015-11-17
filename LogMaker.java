@@ -24,7 +24,7 @@ class LogMaker
 {
     private static Logger logger = Logger.getGlobal();
 
-    public Logger get_logger()
+    public static Logger get_logger()
     {
         return logger;
     }

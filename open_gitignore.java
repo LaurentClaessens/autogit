@@ -38,12 +38,12 @@ class edit_gitignore_launcher implements Runnable
         System.out.println("Click for editing .gitignore in "+repo.getPathName());
 
         CommandLine command=new CommandLine("git diff");
-        command.working_directory=repo_path;
+        command.working_directory=repo.getPathName();
         command.envp.add("LC_ALL=C");
         try
         {
             Process p = command.run();
         }
-        catch (IOException) { System.out. }
+        catch (IOException e) { System.out.println("Operation failed"); }
     }
 };

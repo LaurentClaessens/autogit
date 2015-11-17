@@ -36,6 +36,9 @@ public class GitRepository
     }
 
     private File repo_path;
+    public File getPath(){
+        return repo_path;
+    }
     public String getPathName() { 
         String can_path;
         try{ 
@@ -43,7 +46,7 @@ public class GitRepository
         } 
         catch (IOException e){ 
             can_path="Canonical path failed";
-            LogMaker.get_logger().logger.info("Canonical path failed for "+repo_path);
+            LogMaker.get_logger().info("Canonical path failed for "+repo_path);
         }
         return can_path;
     }
