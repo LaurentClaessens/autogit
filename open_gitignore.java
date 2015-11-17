@@ -36,5 +36,14 @@ class edit_gitignore_launcher implements Runnable
     public void run()
     {
         System.out.println("Click for editing .gitignore in "+repo.getPathName());
+
+        CommandLine command=new CommandLine("git diff");
+        command.working_directory=repo_path;
+        command.envp.add("LC_ALL=C");
+        try
+        {
+            Process p = command.run();
+        }
+        catch (IOException) { System.out. }
     }
 };

@@ -28,14 +28,19 @@ class CommandLine
     public String command_line;
     public File working_directory;
     public CommandLine(String cm) { command_line=cm; }
-    public BufferedReader get_buffered_reader_output() throws IOException
-        // return the output as a BufferedReader object that is ready to be read line by line.
-        // from http://www.codecodex.com/wiki/Execute_an_external_program_and_capture_the_output
+    public Process run() throws IOException
     {
         Runtime rt = Runtime.getRuntime();
         String[] a_envp=new String[envp.size()];
         envp.toArray(a_envp);
         Process p = rt.exec( command_line,a_envp,working_directory );
+        return p;
+    }
+    public BufferedReader get_buffered_reader_output() throws IOException
+        // return the output as a BufferedReader object that is ready to be read line by line.
+        // from http://www.codecodex.com/wiki/Execute_an_external_program_and_capture_the_output
+    {
+        Process p = run();
         BufferedReader input = new BufferedReader( new InputStreamReader( p.getInputStream()));
         return input;
     }
@@ -54,5 +59,3 @@ class CommandLine
         return output;
     }
 }
-
-
