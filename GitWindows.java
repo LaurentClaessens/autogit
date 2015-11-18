@@ -50,25 +50,35 @@ public class GitWindows extends JFrame {
         pane.add(area);
     }
 
+    private JButton CreateButton(JPanel button_panel, String text, final Runnable to_do )
+    {
+
+        JButton generalist_button = new JButton(text);
+
+        // This ActionListener is embedded because I do not know how to pass a parameter (repo).
+        class gitGeneralistActionListener implements ActionListener
+        {
+            public void actionPerformed(ActionEvent e){ 
+                Runnable git_generalist_runnable = to_do;
+                Thread generalist_thread = new Thread(git_generalist_runnable);
+                generalist_thread.start();
+            }
+        }
+
+        generalist_button.addActionListener( new gitGeneralistActionListener() );
+        button_panel.add(generalist_button);
+
+        return generalist_button;
+
+    }
+
     private void addButtonsToPanel( final Container pane )
     {
         JPanel button_panel = new JPanel();
-        JButton gitignore_button = new JButton("Edit .gitignore");
 
+        CreateButton(  button_panel,"Edit .gitignore",  new edit_gitignore_launcher(repo) );
+        CreateButton(  button_panel,"git diff",  new edit_gitignore_launcher(repo) );
 
-            // This ActionListener is embedded because I do not know how to pass a parameter (repo).
-            class gitignoreActionListener implements ActionListener
-            {
-                public void actionPerformed(ActionEvent e){ 
-                    Runnable edit_gitignore_runnable = new edit_gitignore_launcher(repo);
-                    Thread edit_gitignore = new Thread(edit_gitignore_runnable);
-                    edit_gitignore.start();
-                }
-}
-
-        gitignore_button.addActionListener( new gitignoreActionListener() );
-
-        button_panel.add(gitignore_button);
         pane.add( button_panel,BorderLayout.SOUTH );
     }
 

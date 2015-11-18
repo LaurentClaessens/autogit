@@ -18,7 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import java.io.*;
 
-
 class open_gitignore {
     public static void main()
     {
@@ -38,7 +37,7 @@ class edit_gitignore_launcher implements Runnable
         System.out.println("Click for editing .gitignore in "+repo.getPathName());
 
         CommandLine command=new CommandLine("git diff");
-        command.working_directory=repo.getPathName();
+        command.working_directory=repo.getPath();
         command.envp.add("LC_ALL=C");
         try
         {
