@@ -30,7 +30,6 @@ class CommandLine
     public CommandLine(String cm) { command_line=cm; }
     public Process run() throws IOException
     {
-        LogMaker.get_logger().info("Je passe ici");
         Runtime rt = Runtime.getRuntime();
         String[] a_envp=new String[envp.size()];
         envp.toArray(a_envp);

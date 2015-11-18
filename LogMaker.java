@@ -29,7 +29,7 @@ class LogMaker
         return logger;
     }
 
-    public void main()
+    public static void main()
     {
         try{
             FileHandler fh= new FileHandler(".autogit.log");
