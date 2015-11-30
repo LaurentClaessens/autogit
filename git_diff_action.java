@@ -18,25 +18,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import java.io.*;
 
-class open_gitignore {
-    public static void main()
-    {
-        System.out.println("Ok, nous avons un .gitignore cliqué");
-    }
-};
-
-class edit_gitignore_launcher implements Runnable
+class git_diff_launcher implements Runnable
 {
     private GitRepository repo;
-    public edit_gitignore_launcher(Object Orepo)
+    public git_diff_launcher(Object Orepo)
     {
         repo=(GitRepository)Orepo;
     }
     public void run()
     {
-        System.out.println("Click for editing .gitignore in "+repo.getPathName());
+        System.out.println("Click for 'git diff' in "+repo.getPathName());
 
-        CommandLine command=new CommandLine("git diff");
+        CommandLine command=new CommandLine("konqueror");
         command.working_directory=repo.getPath();
         command.envp.add("LC_ALL=C");
         try

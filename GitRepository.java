@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //*/
 
-// Since I was not able to use Jgit, I implement it here.
+// Since I didn't succeed to use Jgit, I implement a small git interface here.
 
 import java.io.*;
 import java.io.File;
@@ -46,7 +46,7 @@ public class GitRepository
         } 
         catch (IOException e){ 
             can_path="Canonical path failed";
-            LogMaker.get_logger().info("Canonical path failed for "+repo_path);
+            LogMaker.getLogger().info("Canonical path failed for "+repo_path);
         }
         return can_path;
     }

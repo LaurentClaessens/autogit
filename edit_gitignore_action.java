@@ -17,28 +17,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //*/
 
 import java.io.*;
-import java.util.logging.Logger;
-import java.util.logging.FileHandler;
 
-class LogMaker
+
+class edit_gitignore_launcher implements Runnable
 {
-    private static Logger logger = Logger.getGlobal();
-    public static Logger getLogger()
+    private GitRepository repo;
+    public edit_gitignore_launcher(Object Orepo)
     {
-        return logger;
+        repo=(GitRepository)Orepo;
     }
-
-    public static void main()
+    public void run()
     {
-        try{
-            FileHandler fh= new FileHandler(".autogit.log");
-            logger.addHandler(fh);
-            logger.setUseParentHandlers(false);
-        }
-        catch (IOException e)
-        { 
-            System.out.println("I cannot create the log file");
-            System.exit(1); 
-        }
+        System.out.println("Click for editing .gitignore in "+repo.getPathName());
+
+        //CommandLine command=new CommandLine("git diff");
+        //command.working_directory=repo.getPath();
+        //command.envp.add("LC_ALL=C");
+        //try
+        //{
+        //    Process p = command.run();
+        //}
+        //catch (IOException e) { System.out.println("Operation failed"); }
     }
 };

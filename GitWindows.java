@@ -50,7 +50,7 @@ public class GitWindows extends JFrame {
         pane.add(area);
     }
 
-    private JButton CreateButton(JPanel button_panel, String text, final Runnable to_do )
+    private JButton createButton(JPanel button_panel, String text, final Runnable to_do )
     {
 
         JButton generalist_button = new JButton(text);
@@ -69,15 +69,14 @@ public class GitWindows extends JFrame {
         button_panel.add(generalist_button);
 
         return generalist_button;
-
     }
 
     private void addButtonsToPanel( final Container pane )
     {
         JPanel button_panel = new JPanel();
 
-        CreateButton(  button_panel,"Edit .gitignore",  new edit_gitignore_launcher(repo) );
-        CreateButton(  button_panel,"git diff",  new edit_gitignore_launcher(repo) );
+        createButton(  button_panel,"Edit .gitignore",  new edit_gitignore_launcher(repo) );
+        createButton(  button_panel,"git diff",  new git_diff_launcher(repo) );
 
         pane.add( button_panel,BorderLayout.SOUTH );
     }
