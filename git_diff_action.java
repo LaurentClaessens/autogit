@@ -29,9 +29,10 @@ class git_diff_launcher implements Runnable
     {
         System.out.println("Click for 'git diff' in "+repo.getPathName());
 
-        CommandLine command=new CommandLine("vim");
-        command.working_directory=repo.getPath();
+        CommandLine command=new CommandLine("git diff");
+        command.setWorkingDirectory(repo.getPath());
         command.addEnvironmentVariable("LC_ALL=C");
+        command.setInTerminal(true);
         try
         {
             Process p = command.run();

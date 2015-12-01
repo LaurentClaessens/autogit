@@ -20,24 +20,27 @@ import java.io.*;
 
 class Configuration
 {
-    private static String terminal;
-    public static String getTerminal()
+    private static String terminal_command;
+    public static String getTerminalCommand()
     {
-        return terminal;
+        return terminal_command;
     }
     public static void init()
     {
         String line;
+        String terminal_key="terminal";
         try{
             InputStream fis = new FileInputStream("autogit.cfg");
             InputStreamReader isr = new InputStreamReader(  fis,"utf-8"  );
             BufferedReader br = new BufferedReader(isr);
             while (  (line=br.readLine())!=null  )
             {
-                System.out.println(line);
                 String[]  keyvalue = line.split("=");
-                System.out.println(keyvalue[0]);
-                System.out.println(keyvalue[1]);
+                if (keyvalue[0].equals(terminal_key))
+                {
+                    terminal_command=keyvalue[1];
+                    LogMaker.getLogger().info("terminal found : "+terminal_command);
+                }
             }
         }
         catch (FileNotFoundException e){  System.out.println("File not found "+e);  }

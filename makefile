@@ -10,9 +10,9 @@ CommandLine.class:CommandLine.java
 	javac CommandLine.java
 GitWindows.class:GitWindows.java  edit_gitignore_action.class git_diff_action.class
 	javac GitWindows.java
-edit_gitignore_action.class:edit_gitignore_action.java
+edit_gitignore_action.class:edit_gitignore_action.java GitRepository.class
 	javac edit_gitignore_action.java
-git_diff_action.class:git_diff_action.java
+git_diff_action.class:git_diff_action.java CommandLine.class
 	javac git_diff_action.java
 LogMaker.class:LogMaker.java
 	javac LogMaker.java

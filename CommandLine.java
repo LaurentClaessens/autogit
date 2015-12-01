@@ -20,26 +20,51 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 class CommandLine
 {
     private ArrayList<String> envp=new ArrayList<String>();
 
-    public boolean inTerminal;
-    public String command_line;
-    public File working_directory;
+    private boolean inTerminal=false;
+    private String command_line;
+    private File working_directory;
 
-    public CommandLine(String cm) { command_line=cm; }
+    public CommandLine(String cm) { 
+        command_line=cm; 
+    }
 
     public void addEnvironmentVariable(String ev) { envp.add(ev); }
+    public void setInTerminal(boolean it) { inTerminal=it; }
+    public void setWorkingDirectory(File wd){working_directory=wd;}
+
     public Process run() throws IOException
     {
         Runtime rt = Runtime.getRuntime();
         String[] a_envp=new String[envp.size()];
         envp.toArray(a_envp);
-        LogMaker.getLogger().info("On va faire le exec de "+command_line);
-        Process p = rt.exec( command_line,a_envp,working_directory );
-        return p;
+
+        if (inTerminal)
+        {
+            // For launching "konsole -e git diff" we need a 3 item String[] with "konsole", "-e" and "git diff".
+            String[] tmp = Configuration.getTerminalCommand().split(" ");
+            ArrayList<String> a_cl = new ArrayList<String>(Arrays.asList(tmp));
+            a_cl.add(command_line);
+
+            String[] cl = new String[a_cl.size()];
+            a_cl.toArray(cl);
+
+            LogMaker.getLogger().info("Launching "+command_line);
+            //Process p = rt.exec( cl ,a_envp,working_directory );
+            Process p = rt.exec( cl );
+            return p;
+        }
+        else
+        {
+            LogMaker.getLogger().info("Launching "+command_line);
+            Process p = rt.exec( command_line ,a_envp,working_directory );
+            return p;
+        }
     }
     public BufferedReader get_buffered_reader_output() throws IOException
         // return the output as a BufferedReader object that is ready to be read line by line.
