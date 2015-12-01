@@ -55,8 +55,10 @@ class CommandLine
             a_cl.toArray(cl);
 
             LogMaker.getLogger().info("Launching "+command_line);
+
             //Process p = rt.exec( cl ,a_envp,working_directory );
-            Process p = rt.exec( cl );
+
+            Process p = rt.exec(cl,null,working_directory);             // for some reason, one cannot give environment variable.
             return p;
         }
         else
