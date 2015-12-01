@@ -28,7 +28,7 @@ public class GitRepository
     {
         String line;
         CommandLine command=new CommandLine("git status");
-        command.working_directory=repo_path;
+        command.setWorkingDirectory(repo_path);
         command.addEnvironmentVariable("LC_ALL=C");
 
         BufferedReader input=command.get_buffered_reader_output();
@@ -82,8 +82,7 @@ public class GitRepository
         BufferedReader buffered_message = status_buffered_message();
         while (  (line=buffered_message.readLine())!=null  )
         {
-            if (line.endsWith(searched)) {              // its strange that this works and startsWith works while '==' does not works.
-                return false;}
+            if (line.equals(searched)) { return false;}
         }
         return true;
     }
