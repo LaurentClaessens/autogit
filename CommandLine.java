@@ -23,16 +23,15 @@ import java.util.ArrayList;
 
 class CommandLine
 {
-
     private ArrayList<String> envp=new ArrayList<String>();
 
+    public boolean inTerminal;
     public String command_line;
     public File working_directory;
 
     public CommandLine(String cm) { command_line=cm; }
 
     public void addEnvironmentVariable(String ev) { envp.add(ev); }
-
     public Process run() throws IOException
     {
         Runtime rt = Runtime.getRuntime();

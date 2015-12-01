@@ -22,7 +22,10 @@ import java.util.logging.Logger;
 class autogit {
     public static void main(String[] args) {
 
-        LogMaker.main();            // Initialization of the log system in the file .autogit.log
+        LogMaker.init();            // Initialization of the log system in the file .autogit.log
+        Configuration.init();       // Read the configuratio file "autogit.cfg"
+
+        
 
         File starting_path=new File(args[0]);
         mainloop loop=new mainloop(starting_path);
