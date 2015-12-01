@@ -23,11 +23,16 @@ import java.util.ArrayList;
 
 class CommandLine
 {
-    public ArrayList<String> envp=new ArrayList<String>();
+
+    private ArrayList<String> envp=new ArrayList<String>();
+
     public String command_line;
     public File working_directory;
 
     public CommandLine(String cm) { command_line=cm; }
+
+    public void addEnvironmentVariable(String ev) { envp.add(ev); }
+
     public Process run() throws IOException
     {
         Runtime rt = Runtime.getRuntime();
@@ -35,7 +40,6 @@ class CommandLine
         envp.toArray(a_envp);
         LogMaker.getLogger().info("On va faire le exec de "+command_line);
         Process p = rt.exec( command_line,a_envp,working_directory );
-        System.out.println("heu ..."+p);
         return p;
     }
     public BufferedReader get_buffered_reader_output() throws IOException

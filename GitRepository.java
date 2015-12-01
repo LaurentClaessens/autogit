@@ -29,7 +29,7 @@ public class GitRepository
         String line;
         CommandLine command=new CommandLine("git status");
         command.working_directory=repo_path;
-        command.envp.add("LC_ALL=C");
+        command.addEnvironmentVariable("LC_ALL=C");
 
         BufferedReader input=command.get_buffered_reader_output();
         return input;
