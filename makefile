@@ -1,24 +1,26 @@
-autogit:autogit.java mainloop.class DealWithGit.class GitRepository.class CommandLine.class GitWindows.class edit_gitignore_action.class git_diff_action.class LogMaker.class Configuration.class
+autogit:autogit.java GitWindows mainloop
 	javac autogit.java
-mainloop.class:mainloop.java
+mainloop:mainloop.java
 	javac mainloop.java
-DealWithGit.class:DealWithGit.java  GitWindows.class
+DealWithGit:DealWithGit.java
 	javac DealWithGit.java
-GitRepository.class:GitRepository.java 
+GitRepository:GitRepository.java 
 	javac GitRepository.java
-CommandLine.class:CommandLine.java
+CommandLine:CommandLine.java
 	javac CommandLine.java
-GitWindows.class:GitWindows.java  edit_gitignore_action.class git_diff_action.class
+GitWindows:GitWindows.java edit_gitignore_action git_diff_action
 	javac GitWindows.java
-edit_gitignore_action.class:edit_gitignore_action.java GitRepository.class
+edit_gitignore_action:edit_gitignore_action.java 
 	javac edit_gitignore_action.java
-git_diff_action.class:git_diff_action.java CommandLine.class
+git_diff_action:git_diff_action.java 
 	javac git_diff_action.java
-LogMaker.class:LogMaker.java
+LogMaker:LogMaker.java
 	javac LogMaker.java
-Configuration.class:Configuration.java
+Configuration:Configuration.java
 	javac Configuration.java
+
 clean:
 	rm *.class
 run:autogit
 	java autogit ..
+
