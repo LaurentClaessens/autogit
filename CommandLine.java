@@ -50,13 +50,10 @@ class CommandLine
             String[] tmp = Configuration.getTerminalCommand().split(" ");
             ArrayList<String> a_cl = new ArrayList<String>(Arrays.asList(tmp));
             a_cl.add(command_line);
-
             String[] cl = new String[a_cl.size()];
             a_cl.toArray(cl);
 
             LogMaker.getLogger().info("Launching "+command_line);
-
-            //Process p = rt.exec( cl ,a_envp,working_directory );
 
             Process p = rt.exec(cl,null,working_directory);             // for some reason, one cannot give environment variable.
             return p;
