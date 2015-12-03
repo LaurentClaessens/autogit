@@ -8,7 +8,7 @@ GitRepository:GitRepository.java
 	javac GitRepository.java
 CommandLine:CommandLine.java
 	javac CommandLine.java
-GitWindows:GitWindows.java edit_gitignore_action git_diff_action
+GitWindows:GitWindows.java GitRepository
 	javac GitWindows.java
 edit_gitignore_action:edit_gitignore_action.java 
 	javac edit_gitignore_action.java

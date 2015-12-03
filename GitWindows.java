@@ -28,7 +28,7 @@ public class GitWindows extends JFrame {
 
     private GitRepository repo;
 
-    private void addGitCommitToPane( final Container pane )
+    private void addGitStatusToPane( final Container pane )
     {
         JPanel area = new JPanel();
         String message;
@@ -52,7 +52,6 @@ public class GitWindows extends JFrame {
 
     private JButton createButton(JPanel button_panel, String text, final Runnable to_do )
     {
-
         JButton generalist_button = new JButton(text);
 
         // This ActionListener is embedded because I do not know how to pass a parameter (repo).
@@ -74,11 +73,13 @@ public class GitWindows extends JFrame {
     private void addButtonsToPanel( final Container pane )
     {
         JPanel button_panel = new JPanel();
+        button_panel.setLayout( new BoxLayout(button_panel,BoxLayout.Y_AXIS) );
 
-        createButton(  button_panel,"Edit .gitignore",  new edit_gitignore_launcher(repo) );
-        createButton(  button_panel,"git diff",  new git_diff_launcher(repo) );
+        createButton(  button_panel,"Edit .gitignore", repo.new terminal_command_launcher("vim .gitignore"));
+        createButton(  button_panel,"git diff", repo.new terminal_command_launcher("git diff")  );
+        createButton(  button_panel,"git commit -a", repo.new terminal_command_launcher("git commit -a"));
 
-        pane.add( button_panel,BorderLayout.SOUTH );
+        pane.add( button_panel,BorderLayout.WEST );
     }
 
     private void addTitleToPanel( final Container pane )
@@ -99,7 +100,7 @@ public class GitWindows extends JFrame {
         super("bla");
         repo=gitRepo;
 
-        addGitCommitToPane(getContentPane());
+        addGitStatusToPane(getContentPane());
         addButtonsToPanel(getContentPane());
         addTitleToPanel(getContentPane());
         setSize(getContentPane().getPreferredSize());

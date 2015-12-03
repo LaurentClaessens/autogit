@@ -86,5 +86,35 @@ public class GitRepository
         }
         return true;
     }
+    // Launch the command line in a terminal inside the 'this' path.
+    private Process terminal_action(String cl)  throws IOException
+    {
+        CommandLine command=new CommandLine(cl);
+        command.setWorkingDirectory(getPath());
+        command.addEnvironmentVariable("LC_ALL=C");
+        command.setInTerminal(true);
+        Process p = command.run();
+        return p;
+    }
 
+    class terminal_command_launcher implements Runnable
+    {
+        private String command_line;
+        public terminal_command_launcher(String cl)
+        {
+            command_line=cl;
+        }
+        public void run()
+        {
+            System.out.println("Click for "+command_line+" in "+getPathName());
+            try
+            {
+                Process p=terminal_action(command_line);
+            }
+            catch (IOException e) { 
+                LogMaker.getLogger().info("Operation failed : "+command_line+" in "+getPathName());
+                System.out.println("Operation failed");
+            }
+        }
+    };
 }
