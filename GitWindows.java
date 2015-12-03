@@ -22,11 +22,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 
-
-
 public class GitWindows extends JFrame {
 
     private GitRepository repo;
+    private JTextField short_text_field; 
 
     private void addGitStatusToPane( final Container pane )
     {
@@ -82,14 +81,18 @@ public class GitWindows extends JFrame {
         pane.add( button_panel,BorderLayout.WEST );
     }
 
-    private void addShortCommitLine(final Container pane)
+    private JTextField addShortCommitLine(final Container pane)
     {
         JPanel line = new JPanel( new BorderLayout() );
 
         JTextField short_text_field = new JTextField(20);
         JLabel short_commit_label = new JLabel ("git commit -a with short comment : ");
+        JBitton ok_diff_button = new JButton("ok, commit that!");
+
         line.add(short_commit_label,BorderLayout.WEST);
         line.add(short_text_field,BorderLayout.CENTER);
+
+
 
         pane.add(line,BorderLayout.SOUTH);
     }
@@ -115,7 +118,8 @@ public class GitWindows extends JFrame {
         addGitStatusToPane(getContentPane());
         addButtonsToPanel(getContentPane());
         addTitleToPanel(getContentPane());
-        addShortCommitLine(getContentPane());
+        short_text_field = addShortCommitLine(getContentPane());        // We have to keep a reference to the text field because we will have to read the text inside later.
+
         setSize(getContentPane().getPreferredSize());
     }
 };
