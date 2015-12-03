@@ -82,6 +82,18 @@ public class GitWindows extends JFrame {
         pane.add( button_panel,BorderLayout.WEST );
     }
 
+    private void addShortCommitLine(final Container pane)
+    {
+        JPanel line = new JPanel( new BorderLayout() );
+
+        JTextField short_text_field = new JTextField(20);
+        JLabel short_commit_label = new JLabel ("git commit -a with short comment : ");
+        line.add(short_commit_label,BorderLayout.WEST);
+        line.add(short_text_field,BorderLayout.CENTER);
+
+        pane.add(line,BorderLayout.SOUTH);
+    }
+
     private void addTitleToPanel( final Container pane )
     {
         JPanel title_panel = new JPanel();
@@ -103,6 +115,7 @@ public class GitWindows extends JFrame {
         addGitStatusToPane(getContentPane());
         addButtonsToPanel(getContentPane());
         addTitleToPanel(getContentPane());
+        addShortCommitLine(getContentPane());
         setSize(getContentPane().getPreferredSize());
     }
 };
