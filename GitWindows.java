@@ -25,7 +25,7 @@ import java.io.*;
 public class GitWindows extends JFrame {
 
     private GitRepository repo;
-    private JTextField short_text_field; 
+    private JTextField short_commit_text;
 
     private void addGitStatusToPane( final Container pane )
     {
@@ -51,7 +51,6 @@ public class GitWindows extends JFrame {
 
     private JButton createButton(JPanel button_panel, String text, final Runnable to_do )
     {
-        JButton generalist_button = new JButton(text);
 
         // This ActionListener is embedded because I do not know how to pass a parameter (repo).
         class gitGeneralistActionListener implements ActionListener
@@ -63,6 +62,7 @@ public class GitWindows extends JFrame {
             }
         }
 
+        JButton generalist_button = new JButton(text);
         generalist_button.addActionListener( new gitGeneralistActionListener() );
         button_panel.add(generalist_button);
 
@@ -83,18 +83,27 @@ public class GitWindows extends JFrame {
 
     private JTextField addShortCommitLine(final Container pane)
     {
-        JPanel line = new JPanel( new BorderLayout() );
 
+        class shortGitCommitListener implements ActionListener
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                repo.shortCommit(short_commit_text.getText());
+            }
+        }
+
+        JPanel line = new JPanel( new BorderLayout() );
         JTextField short_text_field = new JTextField(20);
         JLabel short_commit_label = new JLabel ("git commit -a with short comment : ");
-        JBitton ok_diff_button = new JButton("ok, commit that!");
+        JButton ok_commit_button = new JButton("ok, commit that!");
+        ok_commit_button.addActionListener( new shortGitCommitListener() );
 
         line.add(short_commit_label,BorderLayout.WEST);
         line.add(short_text_field,BorderLayout.CENTER);
-
-
+        line.add(ok_commit_button,BorderLayout.EAST);
 
         pane.add(line,BorderLayout.SOUTH);
+        return short_text_field;
     }
 
     private void addTitleToPanel( final Container pane )
@@ -118,7 +127,7 @@ public class GitWindows extends JFrame {
         addGitStatusToPane(getContentPane());
         addButtonsToPanel(getContentPane());
         addTitleToPanel(getContentPane());
-        short_text_field = addShortCommitLine(getContentPane());        // We have to keep a reference to the text field because we will have to read the text inside later.
+        short_commit_text = addShortCommitLine(getContentPane());        // We have to keep a reference to the text field because we will have to read the text inside later.
 
         setSize(getContentPane().getPreferredSize());
     }

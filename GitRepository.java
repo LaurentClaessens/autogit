@@ -16,8 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //*/
 
-// Since I didn't succeed to use Jgit, I implement a small git interface here.
-
 import java.io.*;
 import java.io.File;
 
@@ -117,4 +115,36 @@ public class GitRepository
             }
         }
     };
+
+    class shortCommitRunnable implements Runnable
+    {
+        private String text;
+        public shortCommitRunnable(String t)
+        {
+            text=t;
+        }
+        public void run()
+        {
+            System.out.println("Click for a short commit in "+getPathName()+" avec message : "+text);
+            CommandLine command=new CommandLine( "git commit -a");
+            command.addArgument("--message=\""+text+"\"");
+            command.setWorkingDirectory(getPath());
+            command.addEnvironmentVariable("LC_ALL=C");
+            try
+            {
+                Process p = command.run();
+            }
+            catch (IOException e) { 
+                LogMaker.getLogger().info("Cannot make 'git commit' with message : "+text+" in "+getPathName());
+                System.out.println("Operation failed");
+            }
+        }
+    }
+
+    public void shortCommit(String text)
+    {
+        Runnable short_commit_runnable = this.new shortCommitRunnable( text );
+        Thread short_commit_thread = new Thread(short_commit_runnable);
+        short_commit_thread.start();
+    }
 }
