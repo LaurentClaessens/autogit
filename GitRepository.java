@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import java.io.*;
 import java.io.File;
+import java.util.ArrayList;
 
 public class GitRepository
 {
@@ -25,9 +26,9 @@ public class GitRepository
     private BufferedReader status_buffered_message() throws IOException
     {
         String line;
-        CommandLine command=new CommandLine("git status");
+        CommandLine command=new CommandLine( new String[] { "git","status"});
         command.setWorkingDirectory(repo_path);
-        command.addEnvironmentVariable("LC_ALL=C");
+        command.addEnvironmentVariable("LC_ALL","C");
 
         BufferedReader input=command.get_buffered_reader_output();
         return input;
@@ -85,11 +86,11 @@ public class GitRepository
         return true;
     }
     // Launch the command line in a terminal inside the 'this' path.
-    private Process terminal_action(String cl)  throws IOException
+    private Process terminal_action(String[] cl)  throws IOException
     {
         CommandLine command=new CommandLine(cl);
         command.setWorkingDirectory(getPath());
-        command.addEnvironmentVariable("LC_ALL=C");
+        command.addEnvironmentVariable("LC_ALL","C");
         command.setInTerminal(true);
         Process p = command.run();
         return p;
@@ -97,8 +98,8 @@ public class GitRepository
 
     class terminal_command_launcher implements Runnable
     {
-        private String command_line;
-        public terminal_command_launcher(String cl)
+        private String[] command_line;
+        public terminal_command_launcher(String[] cl)
         {
             command_line=cl;
         }
@@ -126,10 +127,11 @@ public class GitRepository
         public void run()
         {
             System.out.println("Click for a short commit in "+getPathName()+" avec message : "+text);
-            CommandLine command=new CommandLine( "git commit -a");
-            command.addArgument("--message=\""+text+"\"");
+
+            CommandLine command = new CommandLine( new String[] {"git","commit","-a","--message="+text}  );
             command.setWorkingDirectory(getPath());
-            command.addEnvironmentVariable("LC_ALL=C");
+            command.addEnvironmentVariable("LC_ALL","C");
+
             try
             {
                 Process p = command.run();

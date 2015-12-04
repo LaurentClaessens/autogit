@@ -15,10 +15,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //*/
+//
+
+
+// The user cases that I have to support :
+// konsole -e git diff   inside a directory  (this one has to open a new terminal)
+// git commit -a --message='my message'   inside a directory  (has to be silencious)
+// git status   inside a directory and read the output.
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.lang.ProcessBuilder;
+import java.util.Map;
+import java.util.HashMap;
 
 class CommandLine
 {
@@ -27,6 +37,7 @@ class CommandLine
     private boolean inTerminal=false;
     private ArrayList<String> command_line_al;
     private File working_directory;
+    private Map<String,String> environment = new HashMap<String,String>();
 
      // In every case, the given command line is stored in a ArrayList<String>
     public CommandLine(String cm) { 
@@ -36,49 +47,35 @@ class CommandLine
     public CommandLine(String[] cm){ command_line_al=new ArrayList<String>(Arrays.asList(cm)); }
     public CommandLine(ArrayList<String> cm){ command_line_al=cm ;}
 
-    public void addEnvironmentVariable(String ev) { envp.add(ev); }
+    public void addEnvironmentVariable(String env,String value) { environment.put(env,value); }
     public void setInTerminal(boolean it) { inTerminal=it; }
     public void setWorkingDirectory(File wd){working_directory=wd;}
     public void addArgument(String s){ command_line_al.add(s); }
 
     public Process run() throws IOException
     {
-        Runtime rt = Runtime.getRuntime();
-        String[] a_envp=new String[envp.size()];
-        envp.toArray(a_envp);
+        String[] effective_command_line;     // the effective command line has to be a String[]
 
         if (inTerminal)
         {
-            // For launching "konsole -e git diff" we need a 3 item String[] with "konsole", "-e" and "git diff".
             String[] tmp = Configuration.getTerminalCommand().split(" ");
-            ArrayList<String> a_cl = new ArrayList<String>(Arrays.asList(tmp));
-            a_cl.addAll(command_line_al);
-            String[] cl = new String[a_cl.size()];      // What is sent to to exec is a Array
-            a_cl.toArray(cl);
-
-            LogMaker.getLogger().info("Launching "+cl);
-
-            Process p = rt.exec(cl,null,working_directory);             // for some reason, one cannot give environment variable.
-            return p;
+            ArrayList<String> tmp_al  = new ArrayList<String>(Arrays.asList(tmp));
+            tmp_al.addAll(command_line_al);
+            String[] cl = new String[tmp_al.size()];      // What is sent to to exec is a Array
+            tmp_al.toArray(cl);
+            effective_command_line=cl;
         }
         else
         {
-            LogMaker.getLogger().info("Have to transform : "+command_line_al);
-            String[] cl = new String[command_line_al.size()];      // What is sent to to exec is a Array
+            String[] cl = new String[command_line_al.size()];
             command_line_al.toArray(cl);
-
-            LogMaker.getLogger().info("Launching "+cl);
-            if (command_line_al.size()==1)
-            {
-                Process p = rt.exec( cl[0] ,a_envp,working_directory );
-                return p;
-            }
-            else
-            {
-                Process p = rt.exec( cl ,a_envp,working_directory );
-                return p;
-            }
+            effective_command_line=cl;
         }
+        LogMaker.getLogger().info("Launching "+effective_command_line);
+        ProcessBuilder b=new ProcessBuilder(effective_command_line);
+        b.directory(working_directory);
+        b.environment().putAll(environment);
+        return b.start();
     }
     public BufferedReader get_buffered_reader_output() throws IOException
         // return the output as a BufferedReader object that is ready to be read line by line.

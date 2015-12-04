@@ -74,9 +74,9 @@ public class GitWindows extends JFrame {
         JPanel button_panel = new JPanel();
         button_panel.setLayout( new BoxLayout(button_panel,BoxLayout.Y_AXIS) );
 
-        createButton(  button_panel,"Edit .gitignore", repo.new terminal_command_launcher("vim .gitignore"));
-        createButton(  button_panel,"git diff", repo.new terminal_command_launcher("git diff")  );
-        createButton(  button_panel,"git commit -a", repo.new terminal_command_launcher("git commit -a"));
+        createButton(  button_panel,"Edit .gitignore", repo.new terminal_command_launcher(new String[] {"vim",".gitignore"}));
+        createButton(  button_panel,"git diff", repo.new terminal_command_launcher(new String[] { "git","diff"})  );
+        createButton(  button_panel,"git commit -a", repo.new terminal_command_launcher(new String[] {"git", "commit","-a"}));
 
         pane.add( button_panel,BorderLayout.WEST );
     }
