@@ -90,7 +90,7 @@ public class GitRepository
     {
         CommandLine command=new CommandLine(cl);
         command.setWorkingDirectory(getPath());
-        command.addEnvironmentVariable("LC_ALL","C");
+        //command.addEnvironmentVariable("LC_ALL","C");
         command.setInTerminal(true);
         Process p = command.run();
         return p;
