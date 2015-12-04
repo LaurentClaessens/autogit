@@ -77,13 +77,18 @@ class CommandLine
         b.environment().putAll(environment);
         return b.start();
     }
-    public BufferedReader get_buffered_reader_output() throws IOException
+    public BufferedReader get_buffered_reader_output() 
         // return the output as a BufferedReader object that is ready to be read line by line.
         // from http://www.codecodex.com/wiki/Execute_an_external_program_and_capture_the_output
     {
-        Process p = run();
-        BufferedReader input = new BufferedReader( new InputStreamReader( p.getInputStream()));
-        return input;
+        try
+        {
+            Process p = run();
+            BufferedReader input = new BufferedReader( new InputStreamReader( p.getInputStream()));
+            return input;
+        }
+        catch (IOException e){ LogMaker.getLogger().info("Unable to create the buffered reader.") ; }
+        return null;
     }
     public String get_string_output() throws IOException
         // return the output as a string.

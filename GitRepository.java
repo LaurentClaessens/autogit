@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class GitRepository
 {
 
-    private BufferedReader status_buffered_message() throws IOException
+    private BufferedReader status_buffered_message() 
     {
         String line;
         CommandLine command=new CommandLine( new String[] { "git","status"});
@@ -35,9 +35,40 @@ public class GitRepository
     }
 
     private File repo_path;
-    public File getPath(){
-        return repo_path;
+    public File getPath(){ return repo_path; }
+
+    public File[] untracked_files ()
+    {
+        BufferedReader status=status_buffered_message();
+        Boolean yet=false;
+        String line;
+        ArrayList<File> file_list = new ArrayList<File>();
+        try
+        {
+            while (  (line=status.readLine())!=null  )
+            {
+                if (yet==true)
+                {
+                    if (line.startsWith("\t"))
+                    {
+                        String[] tmp=line.split("\t");
+                        file_list.add(new File(tmp[1]));
+                    }
+                }
+                if (line.equals("Untracked files:")) 
+                { 
+                    yet=true; 
+                    LogMaker.getLogger().info("'Untracked files' line found");   
+                }
+            }
+            status.close();
+        }
+        catch(IOException e){ LogMaker.getLogger().info("readLine probably failed in 'untracked_files'");  }
+        File[] file_array=new File[file_list.size()];
+        file_list.toArray(file_array);
+        return file_array;
     }
+
     public String getPathName() { 
         String can_path;
         try{ 
@@ -90,7 +121,6 @@ public class GitRepository
     {
         CommandLine command=new CommandLine(cl);
         command.setWorkingDirectory(getPath());
-        //command.addEnvironmentVariable("LC_ALL","C");
         command.setInTerminal(true);
         Process p = command.run();
         return p;
@@ -140,6 +170,14 @@ public class GitRepository
                 LogMaker.getLogger().info("Cannot make 'git commit' with message : "+text+" in "+getPathName());
                 System.out.println("Operation failed");
             }
+        }
+    }
+
+    class add_untracked_gitignore implements Runnable
+    {
+        public void run()
+        {
+            File[] tmp=untracked_files();
         }
     }
 
