@@ -37,7 +37,20 @@ public class GitRepository
     private File repo_path;
     public File getPath(){ return repo_path; }
 
-    public File[] untracked_files ()
+    public String getPathName() { 
+        String can_path;
+        try{ 
+            can_path=repo_path.getCanonicalPath();
+        } 
+        catch (IOException e){ 
+            can_path="Canonical path failed";
+            LogMaker.getLogger().info("Canonical path failed for "+repo_path);
+        }
+        return can_path;
+    }
+
+    public ArrayList<File> untracked_files ()
+    // return the "list" of untracked files.
     {
         BufferedReader status=status_buffered_message();
         Boolean yet=false;
@@ -51,8 +64,9 @@ public class GitRepository
                 {
                     if (line.startsWith("\t"))
                     {
-                        String[] tmp=line.split("\t");
-                        file_list.add(new File(tmp[1]));
+                        String filename=line.split("\t")[1];
+                        File filepath=new File( getPath(),filename );
+                        file_list.add(filepath);
                     }
                 }
                 if (line.equals("Untracked files:")) 
@@ -64,22 +78,9 @@ public class GitRepository
             status.close();
         }
         catch(IOException e){ LogMaker.getLogger().info("readLine probably failed in 'untracked_files'");  }
-        File[] file_array=new File[file_list.size()];
-        file_list.toArray(file_array);
-        return file_array;
+        return file_list;
     }
 
-    public String getPathName() { 
-        String can_path;
-        try{ 
-            can_path=repo_path.getCanonicalPath();
-        } 
-        catch (IOException e){ 
-            can_path="Canonical path failed";
-            LogMaker.getLogger().info("Canonical path failed for "+repo_path);
-        }
-        return can_path;
-    }
     public GitRepository(File pathname) throws IOException
     {
 
@@ -173,13 +174,32 @@ public class GitRepository
         }
     }
 
-    class add_untracked_gitignore implements Runnable
+    // This function add the untracked files in '.gitignore '.
+    // - Boolean top (default=false) if 'top' is true, add the untracked files at the top of .gitignore instead of the bottom.
+    //     if 'top' is true, a blank line is added _under_ the list and if 'top' is false, a blank line is added _over_ the list.
+    // - String comment (defaut="# Automatically added")
+    // after having used this function, you should open the file for manual editing.
+    public void add_untracked_gitignore(Boolean top,String comment)
     {
-        public void run()
+        ArrayList<String> to_be_added=new ArrayList<String>();
+        if (!top){to_be_added.add("");}
+
+        // to be read :
+       // https://docs.oracle.com/javase/tutorial/essential/io/pathOps.html
+
+        to_be_added.add(comment);
+        for (File file:untracked_files())
         {
-            File[] tmp=untracked_files();
+            String tmp=file.getAbsolutePath();
+            //System.out.println(file.getFileName());
+            System.out.println(tmp);
+            if (file.isDirectory()) { tmp=tmp+"/*"; }
+            System.out.println(tmp);
         }
+        
+        if (top){to_be_added.add("");}
     }
+    public void add_untracked_gitignore() { add_untracked_gitignore(false,"# Automatically added"); }
 
     public void shortCommit(String text)
     {

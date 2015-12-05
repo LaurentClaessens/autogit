@@ -69,12 +69,21 @@ public class GitWindows extends JFrame {
         return generalist_button;
     }
 
+    // the function 'add_untracked_gitignore' in 'GitRepository' makes the minimal treatement.
+    private class untracked_action implements Runnable
+    {
+        public void run()
+        {
+            repo.add_untracked_gitignore();
+        }
+    }
+
     private void addButtonsToPanel( final Container pane )
     {
         JPanel button_panel = new JPanel();
         button_panel.setLayout( new BoxLayout(button_panel,BoxLayout.Y_AXIS) );
 
-        createButton(  button_panel,"Add untracked files in .gitignore",repo.new add_untracked_gitignore());
+        createButton(  button_panel,"Add untracked files in .gitignore",new untracked_action());
         createButton(  button_panel,"Edit .gitignore", repo.new terminal_command_launcher(new String[] {"vim",".gitignore"}));
         createButton(  button_panel,"git diff", repo.new terminal_command_launcher(new String[] { "git","diff"})  );
         createButton(  button_panel,"git commit -a", repo.new terminal_command_launcher(new String[] {"git", "commit","-a"}));
