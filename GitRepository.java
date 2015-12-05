@@ -177,19 +177,15 @@ public class GitRepository
         ArrayList<String> to_be_added=new ArrayList<String>();
         if (!top){to_be_added.add("");}
 
-        // to be read :
-       // https://docs.oracle.com/javase/tutorial/essential/io/pathOps.html
-
         to_be_added.add(comment);
         for (Path file:untracked_files())
         {
-            String tmp=file.toString();
-            if (file.toFile().isDirectory()) { tmp=tmp+"/*"; }
-            Path retmp=Paths.get(tmp);
-            System.out.println("Path : "+retmp);
+            String string_path=file.toString();
+            if (file.toFile().isDirectory()) { string_path=string_path+"/*"; }
+            to_be_added.add(string_path);
         }
-        
         if (top){to_be_added.add("");}
+        System.out.println(to_be_added);
     }
     public void add_untracked_gitignore() { add_untracked_gitignore(false,"# Automatically added"); }
 
