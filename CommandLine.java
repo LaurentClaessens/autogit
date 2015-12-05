@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.lang.ProcessBuilder;
 import java.util.Map;
 import java.util.HashMap;
+import java.nio.file.Path;
 
 class CommandLine
 {
@@ -36,7 +37,7 @@ class CommandLine
 
     private boolean inTerminal=false;
     private ArrayList<String> command_line_al;
-    private File working_directory;
+    private Path working_directory;
     private Map<String,String> environment = new HashMap<String,String>();
 
      // In every case, the given command line is stored in a ArrayList<String>
@@ -49,7 +50,7 @@ class CommandLine
 
     public void addEnvironmentVariable(String env,String value) { environment.put(env,value); }
     public void setInTerminal(boolean it) { inTerminal=it; }
-    public void setWorkingDirectory(File wd){working_directory=wd;}
+    public void setWorkingDirectory(Path wd){working_directory=wd;}
     public void addArgument(String s){ command_line_al.add(s); }
 
     public Process run() throws IOException
@@ -73,7 +74,7 @@ class CommandLine
         }
         LogMaker.getLogger().info("Launching "+effective_command_line);
         ProcessBuilder b=new ProcessBuilder(effective_command_line);
-        b.directory(working_directory);
+        b.directory(working_directory.toFile());
         b.environment().putAll(environment);
         return b.start();
     }

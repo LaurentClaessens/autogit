@@ -17,7 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //*/
 
 import java.io.*;
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class GitRepository
@@ -34,28 +35,18 @@ public class GitRepository
         return input;
     }
 
-    private File repo_path;
-    public File getPath(){ return repo_path; }
+    private Path repo_path;         // This one is an absolute path.
+    public Path getPath(){ return repo_path; }
 
-    public String getPathName() { 
-        String can_path;
-        try{ 
-            can_path=repo_path.getCanonicalPath();
-        } 
-        catch (IOException e){ 
-            can_path="Canonical path failed";
-            LogMaker.getLogger().info("Canonical path failed for "+repo_path);
-        }
-        return can_path;
-    }
+    public String getPathName() { return repo_path.toString(); }
 
-    public ArrayList<File> untracked_files ()
+    public ArrayList<Path> untracked_files ()
     // return the "list" of untracked files.
     {
         BufferedReader status=status_buffered_message();
         Boolean yet=false;
         String line;
-        ArrayList<File> file_list = new ArrayList<File>();
+        ArrayList<Path> file_list = new ArrayList<Path>();
         try
         {
             while (  (line=status.readLine())!=null  )
@@ -65,7 +56,7 @@ public class GitRepository
                     if (line.startsWith("\t"))
                     {
                         String filename=line.split("\t")[1];
-                        File filepath=new File( getPath(),filename );
+                        Path filepath=getPath().resolve(filename);
                         file_list.add(filepath);
                     }
                 }
@@ -81,17 +72,19 @@ public class GitRepository
         return file_list;
     }
 
-    public GitRepository(File pathname) throws IOException
+    public GitRepository(Path path_to_repo) throws IOException
     {
 
-        if (!pathname.exists())
+        if (!path_to_repo.toFile().exists())
         {
-            System.out.println("The path "+pathname+" does not exist");
+            System.out.println("The path "+path_to_repo+" does not exist");
             System.exit(1);
         }
-        repo_path=pathname.getCanonicalFile();
-
+        repo_path=path_to_repo;
     }
+    public GitRepository(String pathname) throws IOException { this(Paths.get(pathname));  }
+    public GitRepository(File pathname) throws IOException { this(pathname.toPath());  }
+
     public String status_message() throws IOException
     {
         String output="";
@@ -188,13 +181,12 @@ public class GitRepository
        // https://docs.oracle.com/javase/tutorial/essential/io/pathOps.html
 
         to_be_added.add(comment);
-        for (File file:untracked_files())
+        for (Path file:untracked_files())
         {
-            String tmp=file.getAbsolutePath();
-            //System.out.println(file.getFileName());
-            System.out.println(tmp);
-            if (file.isDirectory()) { tmp=tmp+"/*"; }
-            System.out.println(tmp);
+            String tmp=file.toString();
+            if (file.toFile().isDirectory()) { tmp=tmp+"/*"; }
+            Path retmp=Paths.get(tmp);
+            System.out.println("Path : "+retmp);
         }
         
         if (top){to_be_added.add("");}
