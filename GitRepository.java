@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //*/
 
 import java.io.*;
+import java.lang.String;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -186,6 +187,8 @@ public class GitRepository
         }
         if (top){to_be_added.add("");}
         System.out.println(to_be_added);
+        String s=combine.join("\n",to_be_added);
+        System.out.println(s);
     }
     public void add_untracked_gitignore() { add_untracked_gitignore(false,"# Automatically added"); }
 

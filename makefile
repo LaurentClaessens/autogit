@@ -4,7 +4,7 @@ mainloop:mainloop.java
 	javac mainloop.java
 DealWithGit:DealWithGit.java
 	javac DealWithGit.java
-GitRepository:GitRepository.java CommandLine
+GitRepository:GitRepository.java CommandLine combine
 	javac GitRepository.java
 CommandLine:CommandLine.java
 	javac CommandLine.java
@@ -14,6 +14,8 @@ LogMaker:LogMaker.java
 	javac LogMaker.java
 Configuration:Configuration.java
 	javac Configuration.java
+combine:combine.java
+	javac combine.java
 
 clean:
 	rm *.class
