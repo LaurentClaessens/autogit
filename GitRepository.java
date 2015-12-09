@@ -20,6 +20,8 @@ import java.io.*;
 import java.lang.String;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
 public class GitRepository
@@ -38,8 +40,9 @@ public class GitRepository
 
     private Path repo_path;         // This one is an absolute path.
     public Path getPath(){ return repo_path; }
-
     public String getPathName() { return repo_path.toString(); }
+
+    public Path getGitignore() { return getPath().resolve(Paths.get(".gitignore")); }
 
     public ArrayList<Path> untracked_files ()
     // return the "list" of untracked files.
@@ -69,7 +72,10 @@ public class GitRepository
             }
             status.close();
         }
-        catch(IOException e){ LogMaker.getLogger().info("readLine probably failed in 'untracked_files'");  }
+        catch(IOException e)
+        {
+            LogMaker.getLogger().info("readLine probably failed in 'untracked_files'");  
+        }
         return file_list;
     }
 
@@ -176,19 +182,28 @@ public class GitRepository
     public void add_untracked_gitignore(Boolean top,String comment)
     {
         ArrayList<String> to_be_added=new ArrayList<String>();
-        if (!top){to_be_added.add("");}
 
+        if (!top){to_be_added.add("");}
         to_be_added.add(comment);
         for (Path file:untracked_files())
         {
-            String string_path=file.toString();
+            Path relative=getPath().relativize(file);
+            String string_path=relative.toString();
             if (file.toFile().isDirectory()) { string_path=string_path+"/*"; }
             to_be_added.add(string_path);
         }
         if (top){to_be_added.add("");}
-        System.out.println(to_be_added);
         String s=combine.join("\n",to_be_added);
         System.out.println(s);
+        try
+        {
+            Files.write(getGitignore(), s.getBytes(), StandardOpenOption.CREATE,StandardOpenOption.APPEND);
+        }
+        catch (IOException e) 
+        { 
+            //LogMaker().getLogger().info("Something wrong with writing in '.gitignore' for "+getPathName());  
+            System.out.println("Something wrong with writing in '.gitignore' for "+getPathName());
+        }
     }
     public void add_untracked_gitignore() { add_untracked_gitignore(false,"# Automatically added"); }
 

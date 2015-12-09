@@ -6,3 +6,6 @@
 *.class
 .GitRepository.log*
 .autogit.log
+
+# Automatically added
+.autogit.log.lck
